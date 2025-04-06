@@ -1,0 +1,171 @@
+CREATE DATABASE ManufacturingUnit;
+
+USE ManufacturingUnit;
+
+CREATE TABLE BUYER(
+BUYER_NUM INT(5) ZEROFILL AUTO_INCREMENT UNIQUE,
+BUYER_NAME CHAR(20) NOT NULL,
+BUYER_CONTACT BIGINT(10) NOT NULL UNIQUE PRIMARY KEY,
+BUYER_PASSWORD VARCHAR(10) NOT NULL,
+BUYER_HINT VARCHAR(20) NOT NULL,
+CONSTRAINT chk_contact CHECK (BUYER_CONTACT like '[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
+);
+
+INSERT INTO BUYER(BUYER_NAME,BUYER_CONTACT,BUYER_PASSWORD,BUYER_HINT) VALUES("CHAITHANYA",9999911111,"chai218","JSS"),("NAVYA",9999922111,"Navya00","PSS");
+
+
+CREATE TABLE WORKER(
+    -> ID VARCHAR(8) PRIMARY KEY NOT NULL,
+    -> NAME CHAR(30) NOT NULL,
+    -> SALARY DECIMAL(10,2) NOT NULL,
+    -> AGE INT,
+    -> SUPERVISOR VARCHAR(15) NOT NULL,
+    -> POSITION VARCHAR(15) NOT NULL,
+    -> LEAVE_DATE DATE);
+create table department(
+deptid varchar(10) primary key,
+deptname char(30),
+product varchar(30),
+prodid varchar(10),
+quantity int,
+stockmanagerid varchar(10),
+shift1id varchar(10),
+shift2id varchar(10));
+Query OK, 0 rows affected (0.10 sec)
+
+create table rawinput(
+supplyid varchar(10) primary key,
+supplyname char(30),
+supplyphno int,
+composition char(30),
+supplyemail varchar(30));
+Query OK, 0 rows affected (0.06 sec)
+create table product(
+pid varchar(10) primary key,
+pname varchar(30),
+description varchar(100),
+weight varchar(20),
+mrp int,
+quantity int);
+mysql> alter table rawinput add column doj date;
+Query OK, 0 rows affected (0.13 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into rawinput("S001","IRON AND CO.",9876543451,"IRON BAR","ironco@gmail.com",now());
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '"S001","IRON AND CO.",9876543451,"IRON BAR","ironco@gmail.com",now())' at line 1
+mysql> insert into rawinput values ("S001","IRON AND CO.",9876543451,"IRON BAR","ironco@gmail.com",now());
+ERROR 1264 (22003): Out of range value for column 'supplyphno' at row 1
+mysql> alter table rawinput modify column supplyphno bigint(10);
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into rawinput values ("S001","IRON AND CO.",9876543451,"IRON BAR","ironco@gmail.com",now());
+Query OK, 1 row affected, 1 warning (0.01 sec)
+create table CART(
+cartid varchar(10) primary key,
+buyerid varchar(10),
+prodid varchar(10),
+prodname char(30),
+mrp int,
+quantity int,
+totalcost int,
+billed char(4));
+
+create table transaction(
+transid varchar(10) primary key,
+sum bigint(10),
+print int,
+buyerid varchar(10),
+printfile varchar(50),
+totalprice bigint(10),
+purdate date);
+
+    create table feedback(fno int NOT NULL AUTO_INCREMENT,fmsg varchar(100),readmsg char(4) default 'no',primary key(fno));
+Query OK, 0 rows affected (0.05 sec)
+
+create table message(
+mno int NOT NULL AUTO_INCREMENT,
+mid varchar(10),
+msg varchar(100),
+primary key(mno));
+Query OK, 0 rows affected (0.06 sec)
+create table department(
+    -> deptid varchar(10) primary key,
+    -> deptname varchar(30),
+    -> assembly char(5),
+    -> product varchar(30),
+    -> prodid varchar(10),
+    -> quantity int,
+    -> stockmanagerid varchar(10),
+    ->
+    -> shift1id varchar(10),
+    -> shift2id varchar(10));
+
+create table worker(
+workerid varchar(10) primary key,
+workername char(30),
+position varchar(30),
+salary int,
+dob date,
+emaild varchar(30),
+phno bigint(15),
+altphno bigint(15),
+highestqualification varchar(40),
+mothertongue varchar(20),
+experience varchar(50),
+doj date,
+deptid varchar(10),
+foreign key(deptid) references department(deptid) on update cascade on delete set NULL);
+
+INSERT INTO department values("D001","Sanitiser","Sanitiser","P001",1000,"W001","W002","W003"),("D002","Gloves","Gloves","P002",3000,"W007","W008","W0009"),("D003","Mask","Mask","P003",4567,"W013","W014","W015"),("D004","Handwash","Handwash","P004",3777,"W019","W020","W021");
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> alter table project add column quantity int;
+ERROR 1146 (42S02): Table 'manufacturingunit.project' doesn't exist
+mysql> alter table product add column quantity int;
+
+INSERT INTO worker values("W001","ABHAY","STOCK MANAGER",40000,"1988/02/01","abhay@gmail.com",9988776622,8888811111,"BE-CSE","TELUGU","2years",now(),"D001"),
+("W002","SAI","SHIFT 1 MANAGER",30000,"1990/02/26","sai@gmail.com",9999666690,8888854321,"BE-ISE","HINDI","3years",now(),"D001"),
+("W003","DELL","SHIFT 2 MANAGER",50000,"1995/03/22","delly@gmail.com",7878766666,7499968686,"BE-CSE","TELUGU","1year",now(),"D001"),
+("W004","SUNNY","EMPLOYEE",20000,"1999/03/23","sunnyrock@gmail.com",9555567777,8886669991,"BE-CSE","ENGLISH","2years",now(),"D001"),
+("W005","RUTHWIK","EMPLOYEE",70000,"1998/02/03",9966699945,7878755555,"BE-MECH","MALYALAM","3years",now(),"D001"),
+("W006","GREESHMA","EMPLOYEE",65000,"2000/01/05",8888444421,999955553,"BE-CSE","HINDI","1year",now(),"D001");
+ (“W007”,”GIRI”,”ASST SUPERVISOR”,”5000”,”1990/01/05”,7777444421,999944443,”BE-ISE”,”TELUGU”,”2year”,now(),”D001”), (“W008”,”GOURAV”,”SUPERVISOR”,”76000”,”1988/01/05”,7878444421,889955553,”BE-EEE”,”KANNADA”,”7year”,now(),”D001”), (“W009”,”KOUSHIK”,”DIRECTOR”,”165000”,”1980/05/05”,8888888222,999952523,”BE-CSE”,”TELUGU”,”10year”,now(),”D001”), (“W010”,”SRINIVASULU”,”SHIFT 1 MANAGER”,”70000”,”1995/01/22”,8888333321,977955553,”BE-MECH”,”HINDI”,”1year”,now(),”D001”),
+
+INSERT INTO worker values("W001","SAI","STOCK MANAGER",40000,"1988/02/01","sai@gmail.com",9981155612,8811811111,"BE-CSE","TELUGU","2years",now(),"D001",NULL),
+("W002","SHIVA","SHIFT 1 MANAGER",30000,"1990/02/26","shiva@gmail.com",9999665290,8338224321,"BE-ISE","HINDI","3years",now(),"D001",NULL),
+("W003","ABHAY","SHIFT 2 MANAGER",40000,"1988/02/01","abhay@gmail.com",9038116572,8832316511,"BE-CSE","TELUGU","4years",now(),"D001",NULL),
+("W004","AMEYAA","EMPLOYEE",30000,"1988/02/01","ameya@gmail.com",9183410622,8801894111,"BE-CSE","TELUGU","2years",now(),"D001",NULL),
+("W005","RAM","EMPLOYEE",30000,"1988/03/01","ram@gmail.com",9781781624,7300821881,"BE-MECH","KANNADA","2years",now(),"D001",NULL),
+("W006","GAGAN","EMPLOYEE",10000,"1987/02/01","gagan@gmail.com",9781088622,8349920011,"BE-MECH","BENGALI","2years",now(),"D001",NULL);
+
+INSERT INTO worker values("W007","SIYA","STOCK MANAGER",40000,"1988/02/01","siya@gmail.com",9981055612,8810811111,"BE-CSE","TELUGU","2years",now(),"D002",NULL),
+("W008","RIYA","SHIFT 1 MANAGER",30000,"1990/02/26","riya@gmail.com",9999660290,8338224301,"BE-ISE","HINDI","3years",now(),"D002",NULL),
+("W009","RISHI","SHIFT 2 MANAGER",40000,"1988/02/01","rishi@gmail.com",9008116572,8832306511,"BE-CSE","TELUGU","4years",now(),"D002",NULL),
+("W010","RAMESH","EMPLOYEE",30000,"1988/02/01","rames@gmail.com",9183410022,8801894101,"BE-CSE","TELUGU","2years",now(),"D002",NULL),
+("W011","BHAVYA","EMPLOYEE",30000,"1988/03/01","bhavya@gmail.com",9781780624,7300821081,"BE-MECH","KANNADA","2years",now(),"D002",NULL),
+("W012","GANESH","EMPLOYEE",10000,"1987/02/01","ganesh@gmail.com",9781088022,8340920011,"BE-MECH","BENGALI","2years",now(),"D002",NULL);
+
+INSERT INTO worker values("W013","MOHAN","STOCK MANAGER",40000,"1988/02/01","mohan@gmail.com",9961155612,8811611111,"BE-CSE","TELUGU","2years",now(),"D003",NULL),
+("W014","SOHEL","SHIFT 1 MANAGER",30000,"1990/02/26","sohel@gmail.com",9699665290,8338264321,"BE-ISE","HINDI","3years",now(),"D003",NULL),
+("W015","VISHWA","SHIFT 2 MANAGER",40000,"1988/02/01","vishwa@gmail.com",9036116572,8832366511,"BE-CSE","TELUGU","4years",now(),"D003",NULL),
+("W016","UTHREY","EMPLOYEE",30000,"1988/02/01","uthrey@gmail.com",9183410662,8801896111,"BE-CSE","TELUGU","2years",now(),"D003",NULL),
+("W017","SHANMUKH","EMPLOYEE",30000,"1988/03/01","shanmukh@gmail.com",9781681624,7360821881,"BE-MECH","KANNADA","2years",now(),"D003",NULL),
+("W018","JASHWANTH","EMPLOYEE",10000,"1987/02/01","jash@gmail.com",9781068622,8349620011,"BE-MECH","BENGALI","2years",now(),"D003",NULL);
+
+
+create table rawpurchase(
+pnum int not NULL auto_increment,
+supplyid varchar(10),
+item char(10),
+quantity int,
+totalcost int,
+purchase date,
+primary key(pnum));
+INSERT INTO worker values("W019","VEELA","STOCK MANAGER",40000,"1988/02/01","veela@gmail.com",9988755612,8845811111,"BE-CSE","TELUGU","2years",now(),"D004",NULL),
+("W020","SAIVISHNU","SHIFT 1 MANAGER",30000,"1990/02/26","vishnu@gmail.com",9999665490,8888854321,"BE-ISE","HINDI","3years",now(),"D004",NULL),
+("W021","LOHITH","SHIFT 2 MANAGER",40000,"1988/02/01","lohith@gmail.com",9038116522,8832315511,"BE-CSE","TELUGU","4years",now(),"D004",NULL),
+("W022","ALISHA","EMPLOYEE",30000,"1988/02/01","anish@gmail.com",9183400622,8800894111,"BE-CSE","TELUGU","2years",now(),"D004",NULL),
+("W023","PIYUSH","EMPLOYEE",30000,"1988/03/01","piyush@gmail.com",9981781621,7800821881,"BE-MECH","KANNADA","2years",now(),"D004",NULL),
+("W024","SHIVA","EMPLOYEE",10000,"1987/02/01","shiva@gmail.com",9781088622,8749920011,"BE-MECH","BENGALI","2years",now(),"D004",NULL);
